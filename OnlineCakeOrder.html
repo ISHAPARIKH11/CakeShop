@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="angular.js"></script>
+    <script>
+        var app = angular.module("myApp",[]);
+        app.controller('AppCtrl',function($scope,$window){
+            $scope.list=[
+                { 
+                    cakeid:'C0001',
+                   type:'Marriage',
+                   name: 'Eggless Black forest Cake',
+                   price: 400,
+                   active:'c1.jpg'
+                },
+                {
+                cakeid:'C0002',
+                   type:'Anniversary',
+                   name: 'Chocolate Truffle Cake',
+                   price: 450,
+                   active:'c3.jpg'
+               },{
+                cakeid:'C0003',
+                   type:'Birthday',
+                   name: 'Pineapple Cake',
+                   price: 300,
+                   active:'c4.jpg'
+               },{
+                cakeid:'C0004',
+                   type:'Marriage',
+                   name: 'Italian almond cake',
+                   price: 550,
+                   active:'c5.jpg'
+               },
+               {
+                cakeid:'C0005',
+                   type:'Anniversary',
+                   name: 'Fresh Fruit Cake',
+                   price: 450,
+                   active:'c2.jpg'
+               }
+
+            ];
+
+            $scope.finalAmt=0;
+            $scope.itemNum= 0;
+            $scope.CartItem = [];
+           
+            $scope.addCart=function(item,i){
+                $scope.price = item.price - $scope.discount;
+                $scope.finalAmt = $scope.finalAmt + item.price;
+                $scope.itemNum = $scope.itemNum +1;
+                $scope.CartItem.push({'name':item.name,'price':item.price});
+                $scope.list[i].disabled = true;
+            };
+            $scope.removeCart=function(item,i){
+                $scope.finalAmt = $scope.finalAmt - item.price;
+                $scope.itemNum = $scope.itemNum - 1;
+                $scope.CartItem.splice(i,1);
+                $scope.list[i].disabled = false;
+            };
+            
+        });
+
+
+    </script>
+</head>
+<body ng-app="myApp" ng-init="sortData='';cnt=0;"  ng-controller="AppCtrl">
+        
+            <div>
+                    <h1> Welcome User</h1>
+                    <input type="radio" name="sort" ng-click="sortData='name'" > Sort By Name (Ascending)
+                    <input type="radio" name="sort" ng-click="sortData='-name'" > Sort By Name (Descending)
+                    <input type="search" ng-model="ser">
+                    <table width="100%" border=1>
+                        <tr ng-repeat="item in list | limitTo:5:cnt | orderBy:sortData | filter:ser track by $index">
+                           
+                            <td>{{item.cakeid}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.price | currency:' Rs. '}}
+                            </td>
+                            <td>
+                                {{member}}
+                                <input type="checkbox" ng-model="member"> Tick to 10% apply discount
+                            </td>
+                            <td>{{btn[$index]}}
+                                <input type="submit"  value="Add To Cart"  ng-click="addCart(item,$index)" ng-disabled="item.disabled">
+                                <input type="button" value="Remove From Cart" ng-click="removeCart(item,$index)" ng-disabled="!item.disabled">
+                            </td>
+                        </tr>
+                       
+                    </table>
+
+                    <div>
+                        <center>
+                            <h1> Shopping Cart</h1>
+                            {{ch}}
+                            <table>
+                                <tr ng-repeat="cItem in CartItem track by $index">
+                                    <td>{{cItem.name}}</td>
+                                    <td>{{cItem.price}}</td>
+                                </tr>
+                            </table>
+                            <h3> Items in Cart : {{itemNum}}</h3>
+                            <input type="text" ng-model="finalAmt">
+                        </center>
+                    </div>
+            </div>
+   
+</body>
+</html>
