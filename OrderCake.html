@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="angular.js"></script>
+    <script>
+        var app = angular.module("myApp",[]);
+        app.controller('AppCtrl',function($scope){
+            $scope.list=[
+                { 
+                    cakeid:'C0001',
+                   type:'Marriage',
+                   name: 'Eggless Black forest Cake',
+                   price: 400,
+                   active:'c1.jpg'
+                },
+                {
+                cakeid:'C0002',
+                   type:'Anniversary',
+                   name: 'Chocolate Truffle Cake',
+                   price: 450,
+                   active:'c3.jpg'
+               },{
+                cakeid:'C0003',
+                   type:'Birthday',
+                   name: 'Pineapple Cake',
+                   price: 300,
+                   active:'c4.jpg'
+               },{
+                cakeid:'C0004',
+                   type:'Marriage',
+                   name: 'Italian almond cake',
+                   price: 550,
+                   active:'c5.jpg'
+               },
+               {
+                cakeid:'C0005',
+                   type:'Anniversary',
+                   name: 'Fresh Fruit Cake',
+                   price: 450,
+                   active:'c2.jpg'
+               }
+
+            ];
+
+            $scope.user = [
+                {userID:'User1',pwd:'123'},
+                {userID:'User2',pwd:'123'},
+            ];
+            $scope.finalAmt=0;
+            $scope.itemNum = 0;
+            $scope.addCart=function(p){
+                $scope.finalAmt = $scope.finalAmt + p;
+                $scope.itemNum = $scope.itemNum +1;
+            };
+
+
+        });
+
+
+    </script>
+</head>
+<body ng-app="myApp" ng-init="stat=0;sortData=''"  ng-controller="AppCtrl">
+        <form>
+                <input type="text" ng-model="loginID" placeholder="User ID"><br>
+                <input type="password" placeholder="Enter Password" ng-model="pass"><br>
+                <input type="button" value="Login" ng-click="stat=1;">
+                
+            </form>
+    <div ng-repeat="item in user track by $index">
+        <div ng-if="stat==1">
+            <div ng-if="loginID==item.userID">
+                    <h1> Welcome User</h1>
+                    <input type="radio" ng-click="sortData='name'" > Sort By Name (Ascending)
+                    <input type="radio" ng-click="sortData='-name'" > Sort By Name (Descending)
+                    <input type="search" ng-model="ser">
+                    <table width="100%" border=1>
+                        <tr ng-repeat="item in list | orderBy:sortData | filter:ser track by $index">
+                           
+                            <td>{{item.cakeid}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.price | currency:' Rs. '}}</td>
+                            <td>
+                                <input type="button" value="Add To Cart" ng-click="addCart(item.price)">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div>
+                        <center>
+                            <h1> Shopping Cart</h1>
+                            <h3> Items in Cart : {{itemNum}}</h3>
+                            <input type="text" ng-model="finalAmt">
+                        </center>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
